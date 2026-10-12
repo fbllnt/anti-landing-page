@@ -56,17 +56,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .boil{animation:boil .25s steps(1) infinite}
 /* textura de xerox real (03_ASSETS/textures) por cima de cada seção */
 .tex{position:absolute;inset:0;pointer-events:none;z-index:1;background-size:cover;background-position:center;animation:texjump .5s steps(1) infinite}
-.tex.dark{filter:invert(1);mix-blend-mode:screen;opacity:.16}
-.tex.light{mix-blend-mode:multiply;opacity:.2}
-@keyframes texjump{0%{background-position:50% 50%}33%{background-position:48% 52%}66%{background-position:52% 49%}}
+.tex.dark{filter:invert(1);mix-blend-mode:screen;opacity:.09}
+.tex.light{mix-blend-mode:multiply;opacity:.11}
+@keyframes texjump{0%{background-position:50% 50%}33%{background-position:49.4% 50.6%}66%{background-position:50.6% 49.7%}}
 /* borda de papel rasgado (gerada no JS) */
 .tear{position:absolute;left:0;right:0;top:-1px;height:30px;z-index:4;pointer-events:none}
 
 /* ============ EFÊMEROS REAIS (recortes dos quadros dos vídeos) ============ */
-.crop{position:absolute;z-index:2;pointer-events:none;background-repeat:no-repeat;animation:boil .3s steps(1) infinite}
+.crop{position:absolute;z-index:2;pointer-events:none;background-repeat:no-repeat;opacity:.55;animation:boil .3s steps(1) infinite}
 .on-dark .crop{mix-blend-mode:lighten}
 .on-light .crop{mix-blend-mode:darken}
-.paper{position:absolute;z-index:2;pointer-events:none;animation:boil .35s steps(1) infinite}
+.paper{position:absolute;z-index:2;pointer-events:none;opacity:.55;animation:boil .35s steps(1) infinite}
 .paper img{width:100%;height:auto}
 .on-light .paper{mix-blend-mode:multiply}
 .on-dark .paper{mix-blend-mode:screen;filter:invert(1)}
@@ -108,7 +108,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 #wait .eyebrow{display:flex;gap:10px;align-items:center;justify-content:center}
 #wait .eyebrow i{width:7px;height:7px;background:var(--vermelho);animation:blink .8s steps(1) infinite}
 /* ESPERE: duas cores, com uma fatia deslocada (ref B1) */
-.w-espere{position:relative;font-size:clamp(56px,min(calc(var(--cw) * .15),20vh),176px);line-height:.86;margin:18px 0 6px;letter-spacing:.01em;white-space:nowrap}
+.w-espere{position:relative;font-size:clamp(48px,min(calc(var(--cw) * .1275),17vh),150px);line-height:.86;margin:18px 0 6px;letter-spacing:.01em;white-space:nowrap}
 .w-espere .a{color:var(--lima)}.w-espere .b{color:var(--lima)}
 .w-espere .cut{position:absolute;inset:0;pointer-events:none;clip-path:inset(58% 0 30% 0);translate:.06em 0;animation:cutJ 3.6s steps(1) infinite}
 @keyframes cutJ{0%,70%{translate:.06em 0}72%{translate:-.05em 0}74%{translate:.11em 0}76%,100%{translate:.06em 0}}
@@ -378,7 +378,7 @@ footer .legal a{text-transform:uppercase;letter-spacing:.08em}
   .brand .icon{width:36px;height:36px}.brand .icon img{width:26px}
   .brand .word{display:none}
   #wait .skel{width:120vw;opacity:.28}
-  .w-espere{font-size:17vw}
+  .w-espere{font-size:14.45vw}
   .clock{display:grid;grid-template-columns:auto auto;gap:22px 28px}
   .clock .dv{display:none}
   .clock .v{font-size:6.6vw}
@@ -534,7 +534,7 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
 <!-- ============ 01 · HERO (loop do esqueleto em tela cheia) ============ -->
 <section class="hero on-dark" id="hero" aria-label="Não espere uma vida">
   <div class="vis" aria-hidden="true"><div class="skel-hero"></div></div>
-  <div class="tex dark" style="background-image:url(img/tex/halftone.jpg);opacity:.1"></div>
+  <div class="tex dark" style="background-image:url(img/tex/halftone.jpg);opacity:.06"></div>
   <div class="crop eph-l" data-crop="003_01,0,0,440,600"></div>
   <div class="crop eph-r" data-crop="003_01,1810,250,110,660"></div>
   <div class="smile" data-smile></div>
@@ -785,9 +785,9 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
   $$('.crop[data-crop]').forEach(function(el){
     var p = el.dataset.crop.split(','), src=p[0], x=+p[1], y=+p[2], w=+p[3], h=+p[4];
     el.style.aspectRatio = w+'/'+h;
-    el.style.backgroundImage = 'url(img/h/'+src+'.jpg)';
-    el.style.backgroundSize = (1920/w*100)+'% auto';
-    el.style.backgroundPosition = (w>=1920?0:x/(1920-w)*100)+'% '+(h>=1080?0:y/(1080-h)*100)+'%';
+    /* recorte já pronto em alta, tirado do quadro original de 7680px */
+    el.style.backgroundImage = 'url(img/eph/'+p.join('_')+'.jpg)';
+    el.style.backgroundSize = '100% 100%';
     el.setAttribute('aria-hidden','true');
   });
   $$('.paper,.tex').forEach(function(el){el.setAttribute('aria-hidden','true')});
