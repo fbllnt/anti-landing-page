@@ -104,15 +104,33 @@ body:not(.locked) .grain{animation:none} /* fora da tela de espera o grão fica 
    barra fina de carregamento, link "ou clique aqui" e o esqueleto atrás. */
 #wait{--cw:min(var(--maxw),100vw - 2 * var(--gutter));position:fixed;inset:0;z-index:100;background:var(--preto);display:grid;place-items:center;overflow:hidden}
 #wait .art{position:absolute;inset:0;z-index:0;display:grid;place-items:center;pointer-events:none}
-#wait .skel{width:min(70vw,calc(84vh * 1500 / 1369),1000px);aspect-ratio:1500/1369;background:url(img/skel_espera.jpg) 50% 50%/contain no-repeat;opacity:.3}
+/* esqueleto 3D girando sozinho, bem devagar (mesmos quadros da abertura) */
+#wait .skel{width:min(76vw,calc(86vh * 1800 / 1389),1180px);aspect-ratio:1800/1389;opacity:.2;mix-blend-mode:lighten;display:block}
 #wait .copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;width:var(--cw)}
 #wait .eyebrow{display:flex;gap:10px;align-items:center;justify-content:center}
 #wait .eyebrow i{width:7px;height:7px;background:var(--vermelho);animation:blink .8s steps(1) infinite}
 /* ESPERE: duas cores, com uma fatia deslocada (ref B1) */
 .w-espere{position:relative;font-size:clamp(48px,min(calc(var(--cw) * .1275),17vh),150px);line-height:.86;margin:18px 0 6px;letter-spacing:.01em;white-space:nowrap}
 .w-espere .a{color:var(--lima)}.w-espere .b{color:var(--lima)}
-.w-espere .cut{position:absolute;inset:0;pointer-events:none;clip-path:inset(58% 0 30% 0);translate:.06em 0;animation:cutJ 3.6s steps(1) infinite}
-@keyframes cutJ{0%,70%{translate:.06em 0}72%{translate:-.05em 0}74%{translate:.11em 0}76%,100%{translate:.06em 0}}
+/* glitch: duas fatias deslocadas pulando em tempos diferentes + um tranco da palavra inteira de vez em quando */
+.w-espere .cut{position:absolute;inset:0;pointer-events:none;clip-path:inset(58% 0 30% 0);translate:.06em 0;animation:cutJ 2.4s steps(1) infinite}
+.w-espere .cut.c2{clip-path:inset(16% 0 70% 0);translate:-.04em 0;animation:cutK 1.9s steps(1) -.7s infinite}
+.w-espere{animation:espJ 4.3s steps(1) infinite}
+@keyframes cutJ{0%,55%{translate:.06em 0;clip-path:inset(58% 0 30% 0)}57%{translate:-.08em 0}59%{translate:.14em 0;clip-path:inset(46% 0 40% 0)}61%{translate:.02em 0}63%,82%{translate:.06em 0;clip-path:inset(58% 0 30% 0)}84%{translate:-.12em 0;clip-path:inset(72% 0 14% 0)}86%,100%{translate:.06em 0;clip-path:inset(58% 0 30% 0)}}
+@keyframes cutK{0%,60%{translate:-.04em 0}62%{translate:.1em 0}64%{translate:-.13em 0;clip-path:inset(26% 0 62% 0)}66%,100%{translate:-.04em 0;clip-path:inset(16% 0 70% 0)}}
+/* glitch geral da tela de espera: a cada 5-10s, ~0,4s de falha em partes da tela (JS liga a classe .gl) */
+#wait .glband{position:absolute;left:0;right:0;z-index:3;pointer-events:none;background:var(--lima);display:none}
+#wait.gl .glband{display:block;animation:glB .42s steps(1) forwards}
+#wait.gl .clock{animation:glC .42s steps(1)}
+#wait.gl .load{animation:glL .42s steps(1)}
+#wait.gl .eyebrow,#wait.gl .skip{animation:glS .42s steps(1)}
+#wait.gl .skel{animation:glK .42s steps(1)}
+@keyframes glB{0%{top:var(--g1);height:3px}20%{top:var(--g2);height:14px;opacity:.85}35%{opacity:0}55%{top:var(--g3);height:2px;opacity:1}70%,100%{opacity:0}}
+@keyframes glC{0%{translate:-10px 0;clip-path:inset(0 0 45% 0)}20%{translate:14px 0;clip-path:none}40%{translate:-4px 0;clip-path:inset(50% 0 0 0)}60%,100%{translate:0 0;clip-path:none}}
+@keyframes glL{0%,20%{translate:0 0}25%{translate:18px 0}45%{translate:-8px 0}60%,100%{translate:0 0}}
+@keyframes glS{0%,40%{translate:0 0}45%{translate:-12px 0}65%,100%{translate:0 0}}
+@keyframes glK{0%{translate:24px 0}30%{translate:-16px 0;opacity:.3}50%,100%{translate:0 0}}
+@keyframes espJ{0%,91%{translate:0 0}92%{translate:-.025em 0}93%{translate:.02em .01em}94%,100%{translate:0 0}}
 /* os quatro valores, como um relógio (refs B2/B3) */
 .clock{display:flex;align-items:flex-start;justify-content:center;gap:clamp(10px,1.4vw,22px);margin-top:clamp(14px,2.4vh,26px)}
 .clock .u{display:flex;flex-direction:column;align-items:center;gap:10px}
@@ -132,7 +150,7 @@ body:not(.locked) .grain{animation:none} /* fora da tela de espera o grão fica 
 .load .row b{color:var(--lima);font-variant-numeric:tabular-nums;font-weight:500}
 .load .track{height:4px;background:rgba(255,255,255,.18);position:relative;overflow:hidden}
 .load .fill{position:absolute;inset:0 auto 0 0;width:3px;background:var(--lima)}
-.load .job{font-size:clamp(17.6px,1.65vw,24.2px);margin-top:14px;letter-spacing:.12em;text-transform:uppercase;font-family:var(--f-mono);white-space:nowrap}
+.load .job{font-size:clamp(19.8px,1.86vw,27.2px);margin-top:14px;letter-spacing:.12em;text-transform:uppercase;font-family:var(--f-mono);white-space:nowrap}
 .load .job em{font-style:normal;color:var(--lima)}
 .skip{margin-top:clamp(22px,3.6vh,36px);display:flex;flex-direction:column;align-items:center;gap:8px}
 #skip{font-family:var(--f-title);font-weight:850;font-stretch:135%;font-variation-settings:"wdth" 135;text-transform:uppercase;font-size:clamp(16px,1.4vw,20px);color:var(--lima);background:none;border:0;border-bottom:2px solid var(--lima);padding:0 0 4px;cursor:pointer;display:flex;gap:10px}
@@ -231,7 +249,7 @@ section{position:relative;overflow:hidden;padding:var(--sec) 0}
 .hero{padding:0;height:100vh;min-height:620px;background:var(--preto)}
 .hero .vis{position:absolute;inset:0;z-index:0}
 /* abertura: esqueleto 3D (quadros do vídeo de 360°) que vira a cabeça para o lado do mouse; recibos e faixa parados nas bordas */
-.hero .skel3d{position:absolute;left:50%;top:calc(76px + 1.5vh);height:calc((100% - 76px - 53px - 4vh) * .873);aspect-ratio:1800/1389;transform:translateX(-50%);mix-blend-mode:lighten;display:block}
+.hero .skel3d{position:absolute;left:50%;top:calc(76px + 2.7vh);height:calc((100% - 76px - 53px - 4vh) * .873);aspect-ratio:1800/1389;transform:translateX(-50%);mix-blend-mode:lighten;display:block}
 .hero .eph-l{left:calc(clamp(100px,10vw,200px) * -1);top:0;width:clamp(170px,22vw,420px);opacity:.28}
 @keyframes ephFloat{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(7px,-4px) rotate(-.6deg)}50%{transform:translate(3px,-11px) rotate(.4deg)}75%{transform:translate(-4px,-5px) rotate(-.3deg)}}
 .hero .eph-r{right:-18px;top:26%;width:clamp(56px,5.6vw,110px)}
@@ -374,7 +392,7 @@ footer .legal a{text-transform:uppercase;letter-spacing:.08em}
   #menu .top{height:64px}
   .brand .icon{width:36px;height:36px}.brand .icon img{width:26px}
   .brand .word{display:none}
-  #wait .skel{width:120vw;opacity:.28}
+  #wait .skel{width:118vw;opacity:.2}
   .w-espere{font-size:14.45vw}
   .clock{display:grid;grid-template-columns:auto auto;gap:22px 28px}
   .clock .dv{display:none}
@@ -462,13 +480,14 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
 
 <!-- ============ 00 · TELA DE ESPERA ============ -->
 <div id="wait" role="dialog" aria-label="Tela de espera">
-  <div class="art" aria-hidden="true"><div class="skel"></div></div>
+  <div class="art" aria-hidden="true"><canvas class="skel" width="1800" height="1389"></canvas></div>
+  <div class="glband" aria-hidden="true"></div>
   <span class="corner bl" aria-hidden="true"><img src="img/logo/anti-icone-preto.svg" alt=""></span>
   <span class="corner br mono" aria-hidden="true">FLT ANTI-003 · ETD 18:15</span>
   <div class="copy">
     <h1 class="sr">Espere 7.776.000 segundos, 129.600 minutos, 2.160 horas ou 90 dias para carregar o pagamento do seu job.</h1>
     <p class="eyebrow"><i></i>Carregando pagamento · prazo padrão do mercado</p>
-    <p class="display w-espere" aria-hidden="true"><span class="a">Esp</span><span class="b">ere</span><span class="cut"><span class="a">Esp</span><span class="b">ere</span></span></p>
+    <p class="display w-espere" aria-hidden="true"><span class="a">Esp</span><span class="b">ere</span><span class="cut"><span class="a">Esp</span><span class="b">ere</span></span><span class="cut c2"><span class="a">Esp</span><span class="b">ere</span></span></p>
     <div class="clock display" aria-hidden="true">
       <div class="u"><b class="v num" id="c-s">7.776.000</b><span class="l">segundos</span></div>
       <span class="dv">/</span>
@@ -852,11 +871,11 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
       feito = a; return true;
     };
     var passo = function(){
-      var d = (alvo - atual) * .075;
-      if(Math.abs(d) > 14) d = d > 0 ? 14 : -14;   /* no giro rápido: no máximo 14° por quadro de tela */
+      var d = (alvo - atual) * .045;
+      if(Math.abs(d) > 9) d = d > 0 ? 9 : -9;   /* no giro rápido: no máximo 9° por quadro de tela */
       atual += d;
       if(Math.abs(alvo - atual) < .05) atual = alvo;
-      if(feito === null || Math.abs(atual - feito) > .01) pinta(atual, Math.abs(d) < 4);
+      if(feito === null || Math.abs(atual - feito) > .01) pinta(atual, Math.abs(d) < 5);
       if(atual !== alvo){ requestAnimationFrame(passo); return; }
       var volta = Math.round(atual/360)*360; atual -= volta; alvo -= volta; giros -= volta; rodando = false;
     };
@@ -881,6 +900,38 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
       } else addEventListener('scroll', function(){ vai(-Math.min(1, scrollY/(innerHeight*.7)) * 90); }, {passive:true});
     }
   }
+
+  /* ---------- tela de espera: o mesmo esqueleto girando sozinho, uma volta a cada 24s ---------- */
+  var wcv = $('#wait .skel');
+  if(wcv && typeof QD !== 'undefined'){
+    var wcx = wcv.getContext('2d'), wa = 0, wt = null;
+    var wpinta = function(a){
+      var v = ((a/3) % 120 + 120) % 120, i = Math.floor(v), t = v - i, A = QD[i], B = QD[(i+1) % 120];
+      if(!A || !A.ok) return; wcx.globalAlpha = 1; wcx.clearRect(0,0,1800,1389); wcx.drawImage(A,0,0);
+      if(t > .02 && B && B.ok){ wcx.globalAlpha = t; wcx.drawImage(B,0,0); }
+    };
+    var wgira = function(ts){
+      if(!document.body.contains(wcv)) return;           /* tela de espera fechou: para */
+      if(wt !== null) wa += (ts - wt) * 15 / 1000;       /* 15° por segundo */
+      wt = ts; wpinta(wa); requestAnimationFrame(wgira);
+    };
+    var wcomeca = function(){ if(QD[0] && QD[0].ok){ if(EXP || reduce) wpinta(0); else requestAnimationFrame(wgira); } else setTimeout(wcomeca, 60); };
+    wcomeca();
+  }
+
+  /* glitch geral da tela de espera, em intervalos aleatórios de 5 a 10 segundos */
+  (function(){
+    var w = $('#wait'); if(!w || EXP || reduce) return;
+    var vez = function(){
+      if(!document.body.contains(w)) return;
+      var r = function(){ return Math.round(10 + Math.random()*80) + '%'; };
+      w.style.setProperty('--g1', r()); w.style.setProperty('--g2', r()); w.style.setProperty('--g3', r());
+      w.classList.remove('gl'); void w.offsetWidth; w.classList.add('gl');
+      setTimeout(function(){ w.classList.remove('gl'); }, 450);
+      setTimeout(vez, 5000 + Math.random()*5000);
+    };
+    setTimeout(vez, 3500);
+  })();
 
   /* ---------- entradas no scroll ---------- */
   var sw = $('.swap');
