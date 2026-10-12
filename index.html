@@ -231,8 +231,8 @@ section{position:relative;overflow:hidden;padding:var(--sec) 0}
 .hero{padding:0;height:100vh;min-height:620px;background:var(--preto)}
 .hero .vis{position:absolute;inset:0;z-index:0}
 /* abertura: esqueleto 3D (quadros do vídeo de 360°) que vira a cabeça para o lado do mouse; recibos e faixa parados nas bordas */
-.hero .skel3d{position:absolute;left:50%;bottom:calc(53px + 4vh);height:calc((100% - 76px - 53px - 4vh) * .97);aspect-ratio:1800/1389;transform:translateX(-50%);mix-blend-mode:lighten;display:block}
-.hero .eph-l{left:calc(clamp(40px,4vw,80px) * -1);top:0;width:clamp(170px,22vw,420px)}
+.hero .skel3d{position:absolute;left:50%;top:calc(76px + 1.5vh);height:calc((100% - 76px - 53px - 4vh) * .873);aspect-ratio:1800/1389;transform:translateX(-50%);mix-blend-mode:lighten;display:block}
+.hero .eph-l{left:calc(clamp(100px,10vw,200px) * -1);top:0;width:clamp(170px,22vw,420px);opacity:.28}
 @keyframes ephFloat{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(7px,-4px) rotate(-.6deg)}50%{transform:translate(3px,-11px) rotate(.4deg)}75%{transform:translate(-4px,-5px) rotate(-.3deg)}}
 .hero .eph-r{right:-18px;top:26%;width:clamp(56px,5.6vw,110px)}
 @keyframes ephShake{0%{transform:translate(0,0)}20%{transform:translate(-2px,1px)}40%{transform:translate(1px,-2px)}60%{transform:translate(2px,1px)}80%{transform:translate(-1px,2px)}}
@@ -395,8 +395,8 @@ footer .legal a{text-transform:uppercase;letter-spacing:.08em}
   .hero .hud .container{grid-template-columns:1fr 1fr}.hero .hud .c{display:none}
   .hero .smile{width:118px;bottom:80px}
   .hero .crop.eph-l,.hero .crop.eph-r{display:block}
-  .hero .eph-l{width:150px}.hero .eph-r{width:44px;top:30%;right:-10px}
-  .hero .skel3d{height:auto;width:112vw;bottom:96px}
+  .hero .eph-l{width:150px;left:-70px}.hero .eph-r{width:44px;top:30%;right:-10px}
+  .hero .skel3d{height:auto;width:101vw;top:auto;bottom:96px}
   .hero .smile{bottom:auto;top:130px}
   .facts,.days{grid-template-columns:1fr 1fr}
   .facts div:nth-child(3),.days div:nth-child(3){border-left:0}
@@ -833,34 +833,52 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
   });
 
   /* ---------- hero: esqueleto 3D ----------
-     71 quadros do vídeo 4K de 360° ("Skeleton Meditation Rotation", corpo inteiro): 35 = de frente, 0 = perfil para a esquerda, 70 = perfil para a direita.
-     Cada lado é a volta real (sem espelhar), então a luz não troca. Entre dois quadros, mistura os dois
-     para o giro ficar suave. Mouse: vira para o lado dele. Celular: vira com a rolagem. */
+     120 quadros do vídeo 4K de 360° ("Skeleton Meditation Rotation"), um a cada 3°: 0 = de frente.
+     O ângulo segue o mouse (centro: de frente; lados: perfil para o lado do mouse). Mouse rápido
+     dá voltas inteiras no sentido do movimento e desacelera até parar. Sem espelhar: a luz não troca.
+     Em movimento lento mistura dois quadros vizinhos; parado, cai sempre num quadro exato.
+     Celular: vira com a rolagem. */
   var cv = $('.hero .skel3d');
   if(cv){
-    var cx = cv.getContext('2d'), NQ = 71, MEIO = 35, QD = [], alvo = MEIO, atual = MEIO, feito = -1, rodando = false;
-    var src = function(i){ return 'img/skel3d/'+(i<10?'0':'')+i+'.webp'; };
-    var pinta = function(v){
-      var i = Math.floor(v), t = v - i, a = QD[i], b = QD[Math.min(NQ-1,i+1)];
-      if(!a || !a.ok) return false;
-      cx.globalAlpha = 1; cx.clearRect(0,0,1800,1389); cx.drawImage(a,0,0);
-      if(t > .02 && b && b.ok){ cx.globalAlpha = t; cx.drawImage(b,0,0); }
-      feito = v; return true;
+    var cx = cv.getContext('2d'), NQ = 120, PASSO = 360/NQ, QD = [], alvo = 0, atual = 0, feito = null, rodando = false;
+    var src = function(i){ return 'img/skel3d/'+('00'+i).slice(-3)+'.webp'; };
+    var quadro = function(a){ return ((a/PASSO) % NQ + NQ) % NQ; };
+    var pinta = function(a, mistura){
+      var v = quadro(a), i = Math.floor(v), t = v - i, A = QD[i], B = QD[(i+1) % NQ];
+      if(!mistura || t < .02 || !B || !B.ok){ if(t > .5 && B && B.ok) A = B; t = 0; }
+      if(!A || !A.ok) return false;
+      cx.globalAlpha = 1; cx.clearRect(0,0,1800,1389); cx.drawImage(A,0,0);
+      if(t > 0){ cx.globalAlpha = t; cx.drawImage(B,0,0); }
+      feito = a; return true;
     };
     var passo = function(){
-      atual += (alvo - atual) * .075;
-      if(Math.abs(alvo - atual) < .01) atual = alvo;
-      if(Math.abs(atual - feito) > .004) pinta(atual);
-      if(atual !== alvo) requestAnimationFrame(passo); else rodando = false;
+      var d = (alvo - atual) * .075;
+      if(Math.abs(d) > 14) d = d > 0 ? 14 : -14;   /* no giro rápido: no máximo 14° por quadro de tela */
+      atual += d;
+      if(Math.abs(alvo - atual) < .05) atual = alvo;
+      if(feito === null || Math.abs(atual - feito) > .01) pinta(atual, Math.abs(d) < 4);
+      if(atual !== alvo){ requestAnimationFrame(passo); return; }
+      var volta = Math.round(atual/360)*360; atual -= volta; alvo -= volta; giros -= volta; rodando = false;
     };
-    var vai = function(v){ alvo = Math.round(Math.max(0, Math.min(NQ-1, v))); /* para sempre num quadro inteiro: sem fantasma */ if(!rodando && !reduce){ rodando = true; requestAnimationFrame(passo); } };
-    var carrega = function(i){ var im = new Image(); im.onload = function(){ im.ok = true; if(i === MEIO){ pinta(MEIO); document.documentElement.dataset.skel = 'ok'; } }; im.src = src(i); QD[i] = im; };
-    carrega(MEIO); for(var q = 0; q < NQ; q++) if(q !== MEIO) carrega(q);
+    var giros = 0;   /* voltas extras acumuladas pelos movimentos rápidos */
+    var vai = function(base){ alvo = Math.round((base + giros)/PASSO)*PASSO; if(!rodando && !reduce){ rodando = true; requestAnimationFrame(passo); } };
+    var carrega = function(i){ var im = new Image(); im.onload = function(){ im.ok = true; if(i === 0){ pinta(0); document.documentElement.dataset.skel = 'ok'; } }; im.src = src(i); QD[i] = im; };
+    /* primeiro a frente (±90°), depois as costas */
+    carrega(0); for(var q = 1; q <= 30; q++){ carrega(q); carrega(NQ-q); } for(q = 31; q < NQ-30; q++) carrega(q);
     if(!EXP && !reduce){
       if(matchMedia('(hover:hover) and (pointer:fine)').matches){
-        $('#hero').addEventListener('pointermove', function(e){ var x = e.clientX/innerWidth*2 - 1; vai(MEIO + Math.max(-1, Math.min(1, x*1.15)) * MEIO); });
-        $('#hero').addEventListener('pointerleave', function(){ vai(MEIO); });
-      } else addEventListener('scroll', function(){ vai(MEIO + Math.min(1, scrollY/(innerHeight*.7)) * MEIO); }, {passive:true});
+        var ux = null, ut = 0, base = 0;
+        $('#hero').addEventListener('pointermove', function(e){
+          var x = e.clientX/innerWidth*2 - 1, agora = performance.now();
+          base = -Math.max(-1, Math.min(1, x*1.15)) * 90;
+          if(ux !== null){
+            var vel = (e.clientX - ux) / Math.max(8, agora - ut);   /* px por ms */
+            if(Math.abs(vel) > 2.2 && Math.abs(alvo - atual) < 200){ giros += (vel > 0 ? -1 : 1) * 360 * Math.min(3, Math.floor(Math.abs(vel)/2.2)); }
+          }
+          ux = e.clientX; ut = agora; vai(base);
+        });
+        $('#hero').addEventListener('pointerleave', function(){ ux = null; vai(0); });
+      } else addEventListener('scroll', function(){ vai(-Math.min(1, scrollY/(innerHeight*.7)) * 90); }, {passive:true});
     }
   }
 
