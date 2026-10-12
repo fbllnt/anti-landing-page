@@ -98,30 +98,50 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .btn-preto:hover{background:var(--lima);color:var(--preto)}
 .btn-sm{font-size:12px;padding:11px 16px}
 
-/* ============ 00 · TELA DE ESPERA ============ */
-#wait{position:fixed;inset:0;z-index:100;background:var(--preto);display:flex;align-items:center;padding-bottom:49px;overflow:hidden}
-/* texto e caveira no mesmo container das linhas do rodapé; a mão direita pode passar 8% da linha */
-#wait .wait-inner{width:min(var(--maxw),100% - 2*var(--gutter));margin-inline:auto;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;column-gap:clamp(40px,3.6vw,72px)}
-#wait .copy{flex:0 0 auto;position:relative;z-index:3}
-#wait .eyebrow{display:flex;gap:12px;align-items:center;margin-bottom:24px}
-#wait .eyebrow i{width:8px;height:8px;background:var(--vermelho);animation:blink .8s steps(1) infinite}
-.count{font-size:clamp(22px,calc(min(var(--maxw),100vw - 2 * var(--gutter)) * .032),40px);width:max-content;max-width:100%}
-.count .ln{white-space:nowrap}
-.count b{color:var(--lima);font-weight:inherit;font-variant-numeric:tabular-nums}
-.load{margin-top:32px;max-width:540px;border-top:1px solid var(--line);padding-top:16px}
-.load .row{display:flex;justify-content:space-between;margin-bottom:10px}
+/* ============ 00 · TELA DE ESPERA ============
+   Limpa: ESPERE em duas cores com corte de fatia, os quatro valores como um relógio,
+   barra fina de carregamento, link "ou clique aqui" e o esqueleto atrás. */
+#wait{--cw:min(var(--maxw),100vw - 2 * var(--gutter));position:fixed;inset:0;z-index:100;background:var(--preto);display:grid;place-items:center;overflow:hidden}
+#wait .art{position:absolute;inset:0;z-index:0;display:grid;place-items:center;pointer-events:none}
+#wait .skel{width:min(70vw,calc(84vh * 1500 / 1369),1000px);aspect-ratio:1500/1369;background:url(img/skel_espera.jpg) 50% 50%/contain no-repeat;opacity:.3}
+#wait .copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;width:var(--cw)}
+#wait .eyebrow{display:flex;gap:10px;align-items:center;justify-content:center}
+#wait .eyebrow i{width:7px;height:7px;background:var(--vermelho);animation:blink .8s steps(1) infinite}
+/* ESPERE: duas cores, com uma fatia deslocada (ref B1) */
+.w-espere{position:relative;font-size:clamp(56px,min(calc(var(--cw) * .15),20vh),176px);line-height:.86;margin:18px 0 6px;letter-spacing:.01em;white-space:nowrap}
+.w-espere .a{color:var(--lima)}.w-espere .b{color:var(--branco)}
+.w-espere .cut{position:absolute;inset:0;pointer-events:none;clip-path:inset(58% 0 30% 0);translate:.06em 0;animation:cutJ 3.6s steps(1) infinite}
+@keyframes cutJ{0%,70%{translate:.06em 0}72%{translate:-.05em 0}74%{translate:.11em 0}76%,100%{translate:.06em 0}}
+/* os quatro valores, como um relógio (refs B2/B3) */
+.clock{display:flex;align-items:flex-start;justify-content:center;gap:clamp(10px,1.4vw,22px);margin-top:clamp(14px,2.4vh,26px)}
+.clock .u{display:flex;flex-direction:column;align-items:center;gap:10px}
+.clock .v{font-size:clamp(26px,min(calc(var(--cw) * .044),6.6vh),56px);line-height:1;color:var(--branco)}
+.clock .u:first-child .v{color:var(--lima)}
+.clock .l{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.7}
+.clock .dv{font-size:clamp(26px,min(calc(var(--cw) * .044),6.6vh),56px);line-height:1;opacity:.35;font-family:var(--f-body);font-weight:300}
+.clock .dv.ou{font-family:var(--f-title);font-weight:850;font-stretch:135%;font-variation-settings:"wdth" 135;opacity:1;font-size:clamp(14px,min(calc(var(--cw) * .018),2.6vh),22px);align-self:center;transform:translateY(-.9em);color:var(--lima)}
+/* dígitos rolando um a um */
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.num .dg{display:inline-block;height:1em;overflow:hidden;vertical-align:top;line-height:1}
+.num .st{display:flex;flex-direction:column;transition:transform .28s steps(4)}
+.num .st i{font-style:normal;height:1em;line-height:1;display:block;text-align:center}
+.num .sep{display:inline-block;line-height:1;vertical-align:top}
+.load{margin-top:clamp(26px,4.4vh,44px);width:min(420px,80vw)}
+.load .row{display:flex;justify-content:space-between;margin-bottom:8px}
 .load .row b{color:var(--lima);font-variant-numeric:tabular-nums;font-weight:500}
-.load .track{height:12px;border:1px solid var(--branco);position:relative;overflow:hidden}
+.load .track{height:4px;background:rgba(255,255,255,.18);position:relative;overflow:hidden}
 .load .fill{position:absolute;inset:0 auto 0 0;width:3px;background:var(--lima)}
-.load .job{font-size:clamp(17px,calc(min(var(--maxw),100vw - 2 * var(--gutter)) * .0225),27px);margin-top:20px;white-space:nowrap}
+.load .job{font-size:12px;margin-top:10px;letter-spacing:.15em;text-transform:uppercase;font-family:var(--f-mono)}
 .load .job em{font-style:normal;color:var(--lima)}
-.skip{margin-top:36px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.skip small{font-family:var(--f-mono);font-size:13px;opacity:.75}
-#wait .art{min-width:0;position:relative;z-index:1;display:flex;align-items:center;justify-content:flex-end}
-#wait .skel{--sw:min(calc(100% / .92),calc(76vh * 1500 / 1369));flex:none;width:var(--sw);margin-right:calc(var(--sw) * -.08);aspect-ratio:1500/1369;background:url(img/skel_espera.jpg) 50% 50%/contain no-repeat}
-@keyframes breathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-12px) scale(1.012)}}
-#wait .foot{position:absolute;left:0;right:0;bottom:0;z-index:3;border-top:1px solid var(--line)}
-#wait .foot .container{display:flex;justify-content:space-between;padding:14px 0;opacity:.7}
+.skip{margin-top:clamp(22px,3.6vh,36px);display:flex;flex-direction:column;align-items:center;gap:8px}
+#skip{font-family:var(--f-title);font-weight:850;font-stretch:135%;font-variation-settings:"wdth" 135;text-transform:uppercase;font-size:clamp(16px,1.4vw,20px);color:var(--lima);background:none;border:0;border-bottom:2px solid var(--lima);padding:0 0 4px;cursor:pointer;display:flex;gap:10px}
+#skip:hover{color:var(--branco);border-color:var(--branco)}
+#skip .arr{transition:transform .15s steps(2)}#skip:hover .arr{transform:translateX(5px)}
+.skip small{font-family:var(--f-mono);font-size:12px;opacity:.6}
+#wait .corner{position:absolute;z-index:2;font-family:var(--f-mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;opacity:.55}
+#wait .corner.bl{bottom:22px;left:var(--gutter);opacity:1}
+#wait .corner.bl img{width:30px;height:auto;background:var(--lima);border-radius:6px;padding:4px;display:block}
+#wait .corner.br{bottom:26px;right:var(--gutter)}
 #wait.out{animation:waitout .5s steps(1) forwards}
 #wipe{position:fixed;inset:0;z-index:101;background:var(--vermelho);pointer-events:none;clip-path:inset(0 100% 0 0)}
 #wipe.go{animation:wipe .55s steps(6) forwards}
@@ -369,15 +389,14 @@ footer .legal a{text-transform:uppercase;letter-spacing:.08em}
   #menu .top{height:64px}
   .brand .icon{width:36px;height:36px}.brand .icon img{width:26px}
   .brand .word{display:none}
-  #wait{align-items:flex-start;padding:32px 0 16px}
-  #wait .wait-inner{grid-template-columns:1fr;row-gap:20px;height:100%;grid-template-rows:auto minmax(0,1fr)}
-  #wait .art{justify-content:center;min-height:0}
-  #wait .skel{--sw:min(100%,calc(40vh * 1500 / 1369));margin-right:0}
-  
-  #wait .foot{display:none}
-  .count{font-size:clamp(18px,5.4vw,34px);width:auto}
-  .count .ln,.load .job{white-space:normal}
-  .load .job{font-size:5.2vw}
+  #wait .skel{width:120vw;opacity:.28}
+  .w-espere{font-size:17vw}
+  .clock{display:grid;grid-template-columns:auto auto;gap:22px 28px}
+  .clock .dv{display:none}
+  .clock .v{font-size:6.6vw}
+  #wait .eyebrow{font-size:10px;letter-spacing:.1em}
+  #wait .corner.br{display:none}
+  .unitrow .x{letter-spacing:.2em}
   .eyebrow{font-size:11px;letter-spacing:.15em}
   .sub{font-size:16px;line-height:25px}
   .head .display{font-size:clamp(28px,8.4vw,48px)}
@@ -444,7 +463,8 @@ html.lay-grao .grain{visibility:visible!important}
 html.lay-textura .tex{visibility:visible!important}
 html.lay-efemeros :is(.crop,.paper),html.lay-efemeros .paper *{visibility:visible!important}
 html.lay-midia :is(.player,.stage,.vis,.shade,.wall,#wait .art),html.lay-midia :is(.player,.stage,.vis,.shade,.wall,#wait .art) *{visibility:visible!important}
-html.lay-tipo :is(.container,#wait .copy,#wait .foot) *{visibility:visible!important}
+html.lay-tipo :is(.container,#wait .copy,#wait .corner) *,html.lay-tipo #wait .corner{visibility:visible!important}
+html.lay-tipo #wait .ic.smile,html.lay-tipo #wait .ic.smile *{visibility:hidden!important}
 html.lay-tipo :is(.container,#wait .copy) :is(.player,.stage,.wall),html.lay-tipo :is(.container,#wait .copy) :is(.player,.stage,.wall) *{visibility:hidden!important}
 html.lay-tipo .ticker *{visibility:visible!important}
 html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!important}
@@ -456,29 +476,32 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
 
 <!-- ============ 00 · TELA DE ESPERA ============ -->
 <div id="wait" role="dialog" aria-label="Tela de espera">
-  <div class="wait-inner">
+  <div class="art" aria-hidden="true"><div class="skel"></div></div>
+  <span class="corner bl" aria-hidden="true"><img src="img/logo/anti-icone-preto.svg" alt=""></span>
+  <span class="corner br mono" aria-hidden="true">FLT ANTI-003 · ETD 18:15</span>
   <div class="copy">
+    <h1 class="sr">Espere 7.776.000 segundos, 129.600 minutos, 2.160 horas ou 90 dias para carregar o pagamento do seu job.</h1>
     <p class="eyebrow"><i></i>Carregando pagamento · prazo padrão do mercado</p>
-    <h1 class="display count" aria-live="off">
-      <span class="ln">Espere</span>
-      <span class="ln"><b id="c-s">7.776.000</b> segundos</span>
-      <span class="ln"><b id="c-m">129.600</b> minutos</span>
-      <span class="ln"><b id="c-h">2.160</b> horas</span>
-      <span class="ln">ou <b id="c-d">90</b> dias</span>
-    </h1>
-    <div class="load">
-      <div class="row mono"><span>Para carregar…</span><b id="c-p">0,000000%</b></div>
-      <div class="track"><div class="fill boil"></div></div>
-      <p class="display job">O pagamento <em>do seu job</em></p>
+    <p class="display w-espere" aria-hidden="true"><span class="a">Esp</span><span class="b">ere</span><span class="cut"><span class="a">Esp</span><span class="b">ere</span></span></p>
+    <div class="clock display" aria-hidden="true">
+      <div class="u"><b class="v num" id="c-s">7.776.000</b><span class="l">segundos</span></div>
+      <span class="dv">/</span>
+      <div class="u"><b class="v num" id="c-m">129.600</b><span class="l">minutos</span></div>
+      <span class="dv">/</span>
+      <div class="u"><b class="v num" id="c-h">2.160</b><span class="l">horas</span></div>
+      <span class="dv ou">ou</span>
+      <div class="u"><b class="v num" id="c-d">90</b><span class="l">dias</span></div>
+    </div>
+    <div class="load mono">
+      <div class="row"><span>Para carregar…</span><b id="c-p">0,000000%</b></div>
+      <div class="track"><div class="fill"></div></div>
+      <p class="job">O pagamento <em>do seu job</em></p>
     </div>
     <div class="skip">
-      <button class="btn btn-lima" id="skip">Ou clique aqui <span class="arr">→</span></button>
+      <button id="skip">Ou clique aqui <span class="arr">→</span></button>
       <small>(cansei de esperar)</small>
     </div>
   </div>
-  <div class="art" aria-hidden="true"><div class="skel"></div></div>
-  </div>
-  <div class="foot mono" aria-hidden="true"><div class="container"><span>FLT ANTI-003 · POS 890</span><span>ETD 18:15 · 1/2 CART</span></div></div>
 </div>
 <div id="wipe" aria-hidden="true"></div>
 
@@ -905,15 +928,64 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
   $$('#menu a').forEach(function(a){ a.addEventListener('click', function(){ setMenu(false) }) });
   addEventListener('keydown', function(e){ if(e.key==='Escape') setMenu(false) });
 
-  /* ---------- 00 · contador de 90 dias ---------- */
+  /* ---------- 00 · contador de 90 dias: cada dígito rola sozinho (ref A3) ---------- */
+  function norm(o){ /* mantém a posição no meio da fita (10–19) sem animar */
+    var p = 10 + (((o.pos % 10) + 10) % 10);
+    if (p !== o.pos){ o.pos = p; o.st.style.transition = 'none'; o.st.style.transform = 'translateY(' + (-p) + 'em)'; void o.st.offsetWidth; o.st.style.transition = ''; }
+  }
+  function buildNum(el, str){
+    el.innerHTML = ''; el._d = []; el._s = str;
+    for (var i = 0; i < str.length; i++){
+      var ch = str[i];
+      if (/\d/.test(ch)){
+        var d = document.createElement('span'); d.className = 'dg';
+        var st = document.createElement('span'); st.className = 'st';
+        var h = ''; for (var k = 0; k < 30; k++) h += '<i>' + (k % 10) + '</i>';
+        st.innerHTML = h; d.appendChild(st); el.appendChild(d);
+        var o = {st: st, pos: 10 + (+ch)}; st.style.transform = 'translateY(' + (-o.pos) + 'em)';
+        st.addEventListener('transitionend', (function(o){ return function(){ norm(o) }})(o));
+        el._d.push(o);
+      } else { var sp = document.createElement('span'); sp.className = 'sep'; sp.textContent = ch; el.appendChild(sp); }
+    }
+  }
+  function setNum(el, str){ /* cada dígito anda pelo caminho mais curto: na contagem regressiva, um passo para baixo */
+    if (!el._d || el._s.length !== str.length){ buildNum(el, str); return; }
+    var di = 0, n = el._d.length;
+    for (var i = 0; i < str.length; i++){
+      if (!/\d/.test(str[i])) continue;
+      var o = el._d[di], v = +str[i], cur = ((o.pos % 10) + 10) % 10;
+      var delta = ((v - cur + 15) % 10) - 5;
+      if (delta){
+        if (o.pos + delta < 0 || o.pos + delta > 29) norm(o);
+        o.st.style.transitionDelay = ((n - 1 - di) * 35) + 'ms';
+        o.pos += delta; o.st.style.transform = 'translateY(' + (-o.pos) + 'em)';
+      }
+      di++;
+    }
+    el._s = str;
+  }
+  function spin(el, base){ /* entrada caça-níquel: cada dígito dá uma volta inteira, em sequência */
+    (el._d || []).forEach(function(o, i){
+      norm(o);
+      o.st.style.transition = 'transform .9s steps(10)'; o.st.style.transitionDelay = (base + i * 70) + 'ms';
+      o.pos += 10; o.st.style.transform = 'translateY(' + (-o.pos) + 'em)';
+      setTimeout(function(){ o.st.style.transition = ''; o.st.style.transitionDelay = ''; norm(o); }, base + i * 70 + 950);
+    });
+  }
   var TOTAL = 7776000, start = Date.now();
-  var cs=$('#c-s'), cm=$('#c-m'), ch=$('#c-h'), cd=$('#c-d'), cp=$('#c-p');
+  var cs=$('#c-s'), cm=$('#c-m'), ch=$('#c-h'), cd=$('#c-d'), cp=$('#c-p'), echoes=$$('.big .echo');
+  function setAll(sv, mv, hv, dv){ setNum(cs, sv); echoes.forEach(function(e){ setNum(e, sv) }); setNum(cm, mv); setNum(ch, hv); setNum(cd, dv); }
   function tick(){
     var gone = (Date.now()-start)/1000, s = Math.max(0, TOTAL - gone);
-    cs.textContent = nf(Math.ceil(s),0); cm.textContent = nf(s/60,2); ch.textContent = nf(s/3600,4); cd.textContent = nf(s/86400,6);
+    setAll(nf(Math.ceil(s),0), nf(Math.floor(s/60),0), nf(Math.floor(s/3600),0), nf(Math.floor(s/86400),0)); /* inteiros, como no DOCX */
     cp.textContent = nf(gone/TOTAL*100,6)+'%';
   }
-  tick(); var timer = setInterval(tick, 1000/12); /* 12 fps: anda "aos trancos" */
+  setAll('7.776.000','129.600','2.160','90');
+  var timer = 0;
+  if (!reduce){
+    setTimeout(function(){ [cs].concat(echoes, [cm, ch, cd]).forEach(function(el, j){ spin(el, j > 4 ? (j - 4) * 140 : 0) }); }, 250);
+    setTimeout(function(){ tick(); timer = setInterval(tick, 1000); }, 1500); /* depois anda de segundo em segundo */
+  }
   var wait=$('#wait'), wipe=$('#wipe');
   function release(){
     clearInterval(timer); wipe.classList.add('go'); wait.classList.add('out'); document.body.classList.remove('locked');
@@ -925,7 +997,7 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
   /* ---------- exportação: tudo no estado final ---------- */
   if(EXP){
     clearInterval(timer); removeEventListener('scroll', onScroll);
-    cs.textContent='7.776.000'; cm.textContent='129.600'; ch.textContent='2.160'; cd.textContent='90'; cp.textContent='0,000000%';
+    setAll('7.776.000','129.600','2.160','90'); cp.textContent='0,000000%';
     var F = Math.max(0, +(Q.get('f')||2)-1);
     $$('.player').forEach(function(p){
       $$('.screen img',p).forEach(function(im,i){ im.classList.toggle('on', i===F) });
