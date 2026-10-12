@@ -231,7 +231,7 @@ section{position:relative;overflow:hidden;padding:var(--sec) 0}
 .hero{padding:0;height:100vh;min-height:620px;background:var(--preto)}
 .hero .vis{position:absolute;inset:0;z-index:0}
 /* abertura: esqueleto 3D (quadros do vídeo de 360°) que vira a cabeça para o lado do mouse; recibos e faixa parados nas bordas */
-.hero .skel3d{position:absolute;left:50%;bottom:53px;height:calc((100% - 76px - 53px) * .97);aspect-ratio:1800/1389;transform:translateX(-50%);mix-blend-mode:lighten;display:block}
+.hero .skel3d{position:absolute;left:50%;bottom:calc(53px + 4vh);height:calc((100% - 76px - 53px - 4vh) * .97);aspect-ratio:1800/1389;transform:translateX(-50%);mix-blend-mode:lighten;display:block}
 .hero .eph-l{left:calc(clamp(40px,4vw,80px) * -1);top:0;width:clamp(170px,22vw,420px)}
 @keyframes ephFloat{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(7px,-4px) rotate(-.6deg)}50%{transform:translate(3px,-11px) rotate(.4deg)}75%{transform:translate(-4px,-5px) rotate(-.3deg)}}
 .hero .eph-r{right:-18px;top:26%;width:clamp(56px,5.6vw,110px)}
@@ -396,7 +396,7 @@ footer .legal a{text-transform:uppercase;letter-spacing:.08em}
   .hero .smile{width:118px;bottom:80px}
   .hero .crop.eph-l,.hero .crop.eph-r{display:block}
   .hero .eph-l{width:150px}.hero .eph-r{width:44px;top:30%;right:-10px}
-  .hero .skel3d{height:auto;width:112vw;bottom:70px}
+  .hero .skel3d{height:auto;width:112vw;bottom:96px}
   .hero .smile{bottom:auto;top:130px}
   .facts,.days{grid-template-columns:1fr 1fr}
   .facts div:nth-child(3),.days div:nth-child(3){border-left:0}
