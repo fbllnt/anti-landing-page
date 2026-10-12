@@ -231,7 +231,7 @@ section{position:relative;overflow:hidden;padding:var(--sec) 0}
 .hero{padding:0;height:100vh;min-height:620px;background:var(--preto)}
 .hero .vis{position:absolute;inset:0;z-index:0}
 /* abertura: esqueleto 3D (quadros do vídeo de 360°) que vira a cabeça para o lado do mouse; recibos e faixa parados nas bordas */
-.hero .skel3d{position:absolute;left:50%;bottom:53px;height:calc((100% - 76px - 53px) * .97);aspect-ratio:3/2;transform:translateX(-50%);mix-blend-mode:lighten;display:block}
+.hero .skel3d{position:absolute;left:50%;bottom:53px;height:calc((100% - 76px - 53px) * .97);aspect-ratio:1800/1389;transform:translateX(-50%);mix-blend-mode:lighten;display:block}
 .hero .eph-l{left:calc(clamp(40px,4vw,80px) * -1);top:0;width:clamp(170px,22vw,420px)}
 @keyframes ephFloat{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(7px,-4px) rotate(-.6deg)}50%{transform:translate(3px,-11px) rotate(.4deg)}75%{transform:translate(-4px,-5px) rotate(-.3deg)}}
 .hero .eph-r{right:-18px;top:26%;width:clamp(56px,5.6vw,110px)}
@@ -396,7 +396,7 @@ footer .legal a{text-transform:uppercase;letter-spacing:.08em}
   .hero .smile{width:118px;bottom:80px}
   .hero .crop.eph-l,.hero .crop.eph-r{display:block}
   .hero .eph-l{width:150px}.hero .eph-r{width:44px;top:30%;right:-10px}
-  .hero .skel3d{height:auto;width:148vw;bottom:70px}
+  .hero .skel3d{height:auto;width:112vw;bottom:70px}
   .hero .smile{bottom:auto;top:130px}
   .facts,.days{grid-template-columns:1fr 1fr}
   .facts div:nth-child(3),.days div:nth-child(3){border-left:0}
@@ -531,7 +531,7 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
 
 <!-- ============ 01 · HERO (loop do esqueleto em tela cheia) ============ -->
 <section class="hero on-dark" id="hero" aria-label="Não espere uma vida">
-  <div class="vis" aria-hidden="true"><canvas class="skel3d" width="1620" height="1080"></canvas></div>
+  <div class="vis" aria-hidden="true"><canvas class="skel3d" width="1800" height="1389"></canvas></div>
   <div class="tex dark" style="background-image:url(img/tex/halftone.jpg);opacity:.06"></div>
   <div class="crop eph-l" data-crop="003_01,0,0,440,600"></div>
   <div class="crop eph-r" data-crop="003_01,1810,250,110,660"></div>
@@ -833,7 +833,7 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
   });
 
   /* ---------- hero: esqueleto 3D ----------
-     71 quadros do vídeo de 360°: 35 = de frente, 0 = perfil para a esquerda, 70 = perfil para a direita.
+     71 quadros do vídeo 4K de 360° ("Skeleton Meditation Rotation", corpo inteiro): 35 = de frente, 0 = perfil para a esquerda, 70 = perfil para a direita.
      Cada lado é a volta real (sem espelhar), então a luz não troca. Entre dois quadros, mistura os dois
      para o giro ficar suave. Mouse: vira para o lado dele. Celular: vira com a rolagem. */
   var cv = $('.hero .skel3d');
@@ -843,7 +843,7 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
     var pinta = function(v){
       var i = Math.floor(v), t = v - i, a = QD[i], b = QD[Math.min(NQ-1,i+1)];
       if(!a || !a.ok) return false;
-      cx.globalAlpha = 1; cx.clearRect(0,0,1620,1080); cx.drawImage(a,0,0);
+      cx.globalAlpha = 1; cx.clearRect(0,0,1800,1389); cx.drawImage(a,0,0);
       if(t > .02 && b && b.ok){ cx.globalAlpha = t; cx.drawImage(b,0,0); }
       feito = v; return true;
     };
@@ -853,7 +853,7 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
       if(Math.abs(atual - feito) > .004) pinta(atual);
       if(atual !== alvo) requestAnimationFrame(passo); else rodando = false;
     };
-    var vai = function(v){ alvo = Math.max(0, Math.min(NQ-1, v)); if(!rodando && !reduce){ rodando = true; requestAnimationFrame(passo); } };
+    var vai = function(v){ alvo = Math.round(Math.max(0, Math.min(NQ-1, v))); /* para sempre num quadro inteiro: sem fantasma */ if(!rodando && !reduce){ rodando = true; requestAnimationFrame(passo); } };
     var carrega = function(i){ var im = new Image(); im.onload = function(){ im.ok = true; if(i === MEIO){ pinta(MEIO); document.documentElement.dataset.skel = 'ok'; } }; im.src = src(i); QD[i] = im; };
     carrega(MEIO); for(var q = 0; q < NQ; q++) if(q !== MEIO) carrega(q);
     if(!EXP && !reduce){
