@@ -327,19 +327,7 @@ section{position:relative;overflow:hidden;padding:var(--sec) 0}
 .step h3{font-weight:700;font-size:27px;line-height:1.1;letter-spacing:-.01em}
 .step p{font-size:15.2px;line-height:1.5;opacity:.75;margin-top:6px}
 
-/* ============ 05 · PAREDE DE PÔSTERES ============ */
-.s-wall{background:var(--preto);padding-bottom:0}
-.wall{margin-top:64px;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:56px 0 64px;position:relative;z-index:3}
-.wall .track{display:flex;gap:28px;width:max-content;animation:wall 70s steps(420) infinite}
-.wall:hover .track{animation-play-state:paused}
-.poster{position:relative;width:clamp(200px,20vw,290px);flex:none;background:#111}
-.poster img{width:100%;height:auto;aspect-ratio:707/1000;object-fit:cover}
-.poster::after{content:"";position:absolute;inset:0;background:url(img/tex/xerox_a.jpg) center/cover;mix-blend-mode:multiply;opacity:.35;pointer-events:none}
-.poster .tape{width:84px;height:24px}
-.poster:nth-child(3n+1){transform:rotate(-2deg)}.poster:nth-child(3n+2){transform:rotate(1.4deg) translateY(14px)}.poster:nth-child(3n){transform:rotate(-.6deg) translateY(-8px)}
-@keyframes wall{to{transform:translateX(-50%)}}
-
-/* ============ 06 · CTA FINAL ============ */
+/* ============ 05 · CTA FINAL ============ */
 .s-cta{background:var(--preto)}
 .s-cta .display{color:var(--lima);font-size:clamp(38px,6vw,104px);max-width:none}
 .s-cta .seja{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:8px}
@@ -517,7 +505,6 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
       <a href="#payday"><span>02</span>Payday</a>
       <a href="#jab"><span>03</span>Job ou jab</a>
       <a href="#freela"><span>04</span>Freela</a>
-      <a href="#ruas"><span>05</span>Nas ruas</a>
     </nav>
     <div class="hd-right">
       <span class="pgto" aria-hidden="true">Pgto <b id="pgto">0%</b></span>
@@ -538,7 +525,6 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
     <li><a class="display" href="#payday"><small>02</small>Payday</a></li>
     <li><a class="display" href="#jab"><small>03</small>Job ou jab</a></li>
     <li><a class="display" href="#freela"><small>04</small>Freela</a></li>
-    <li><a class="display" href="#ruas"><small>05</small>Nas ruas</a></li>
   </ol>
   <div class="container cta"><a class="btn btn-lima" href="https://sejaanti.com.br/quiz">Quero ser Anti <span class="arr">→</span></a></div>
 </div>
@@ -562,7 +548,7 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
   <div class="crop" data-crop="003_01,0,0,440,600" style="left:-130px;top:150px;width:250px"></div>
   <div class="crop" data-crop="003_01,1810,250,110,660" style="right:0;bottom:60px;width:90px"></div>
   <div class="container">
-    <div class="rule mono"><span>01 / 05 · Não espere uma vida</span><span class="r"><span>FLT ANTI-003</span><span>POS 890</span><span>ETD 18:15</span></span></div>
+    <div class="rule mono"><span>01 / 04 · Não espere uma vida</span><span class="r"><span>FLT ANTI-003</span><span>POS 890</span><span>ETD 18:15</span></span></div>
     <div class="head">
       <p class="eyebrow">Anti Creative Finance · a fintech da economia criativa</p>
       <h2 class="display reveal">
@@ -591,7 +577,7 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
   <div class="paper" style="left:-120px;top:190px;width:220px;transform:rotate(-8deg)"><img src="img/tex/jornal.jpg" alt=""></div>
   <div class="crop" data-crop="003_01,1810,250,110,660" style="right:6px;top:140px;width:80px"></div>
   <div class="container">
-    <div class="rule mono"><span>02 / 05 · O payday virou mayday?</span><span class="r"><span>FLT ANTI-004</span><span>Gate: pânico</span><span>ETD 18:15</span></span></div>
+    <div class="rule mono"><span>02 / 04 · O payday virou mayday?</span><span class="r"><span>FLT ANTI-004</span><span>Gate: pânico</span><span>ETD 18:15</span></span></div>
     <div class="head">
       <p class="eyebrow">O payday virou mayday?</p>
       <h2 class="display reveal">
@@ -617,7 +603,7 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
   <div class="crop" data-crop="002_01,150,520,360,460" style="right:-120px;top:180px;width:240px"></div>
   <div class="paper" style="left:-50px;bottom:60px;width:150px;transform:rotate(6deg)"><img src="img/tex/barcode.jpg" alt=""></div>
   <div class="container">
-    <div class="rule mono"><span>03 / 05 · Não é job, é jab</span><span class="r"><span>FLT ANTI-002</span><span>Round 120</span><span>ETD 18:15</span></span></div>
+    <div class="rule mono"><span>03 / 04 · Não é job, é jab</span><span class="r"><span>FLT ANTI-002</span><span>Round 120</span><span>ETD 18:15</span></span></div>
     <div class="head">
       <p class="eyebrow">Não é job, é jab</p>
       <h2 class="display reveal">
@@ -655,7 +641,7 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
   <div class="crop" data-crop="001_03,1400,640,520,440" style="left:-190px;bottom:40px;width:300px"></div>
   <div class="paper" style="right:8px;bottom:70px;width:100px;transform:rotate(-7deg)"><img src="img/tex/qr.jpg" alt=""></div>
   <div class="container">
-    <div class="rule mono"><span>04 / 05 · Free my freela</span><span class="r"><span>FLT ANTI-001</span><span>Status: liberado</span><span>ETD 18:15</span></span></div>
+    <div class="rule mono"><span>04 / 04 · Free my freela</span><span class="r"><span>FLT ANTI-001</span><span>Status: liberado</span><span>ETD 18:15</span></span></div>
     <div class="head">
       <p class="eyebrow">Free my freela</p>
       <h2 class="display reveal">
@@ -678,22 +664,7 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
   </div>
 </section>
 
-<!-- ============ 05 · NAS RUAS (pôsteres da campanha) ============ -->
-<section class="s-wall on-dark" id="ruas" data-nav="4">
-  <div class="tex dark" style="background-image:url(img/tex/caveiras.jpg);opacity:.07"></div>
-  <div class="container">
-    <div class="rule mono"><span>05 / 05 · Nas ruas</span><span class="r"><span>Lambe-lambe</span><span>Cola 2 demãos</span><span>ETD 18:15</span></span></div>
-    <div class="head">
-      <p class="eyebrow">A campanha nas ruas</p>
-      <h2 class="display reveal"><span class="ln">Receba antes.</span><span class="ln" style="color:var(--lima)">Seja Anti.</span></h2>
-    </div>
-  </div>
-  <div class="wall" aria-label="Pôsteres da campanha">
-    <div class="track" id="wall"></div>
-  </div>
-</section>
-
-<!-- ============ 06 · CTA FINAL ============ -->
+<!-- ============ 05 · CTA FINAL ============ -->
 <section class="s-cta on-dark" id="cta">
   <div class="tex dark" style="background-image:url(img/tex/xerox_b.jpg)"></div>
   <div class="crop" data-crop="003_01,0,0,440,600" style="left:-90px;bottom:40px;width:200px;transform:scaleX(-1)"></div>
@@ -843,14 +814,6 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
 
   /* ---------- tickers ---------- */
   $$('[data-ticker]').forEach(function(t){ var s=''; for(var i=0;i<10;i++) s+='<span>'+t.dataset.ticker+'</span>'; t.innerHTML = s+s; });
-
-  /* ---------- parede de pôsteres ---------- */
-  var wall = $('#wall'), wh='';
-  for(var r=0;r<2;r++) for(var i=1;i<=12;i++){
-    var n=(i<10?'0':'')+i;
-    wh += '<figure class="poster"'+(r?' aria-hidden="true"':'')+'><span class="tape a"></span><img src="img/posters/p'+n+'.jpg" alt="'+(r?'':'Pôster da campanha ANTI')+'" loading="lazy"></figure>';
-  }
-  wall.innerHTML = wh;
 
   /* ---------- players: flipbook dos 4 quadros até o .mp4 chegar ---------- */
   $$('.player[data-loop]').forEach(function(p){
