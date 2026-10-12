@@ -50,12 +50,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .grain{position:fixed;inset:-50%;pointer-events:none;z-index:90;opacity:.14;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.2 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
   animation:grain .4s steps(1) infinite}
+body:not(.locked) .grain{animation:none} /* fora da tela de espera o grão fica parado */
 @keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}}
 @keyframes boil{0%{transform:translate(0,0) rotate(0)}33%{transform:translate(1px,-1px) rotate(.15deg)}66%{transform:translate(-1px,1px) rotate(-.1deg)}}
 @keyframes blink{50%{opacity:0}}
 .boil{animation:boil .25s steps(1) infinite}
 /* textura de xerox real (03_ASSETS/textures) por cima de cada seção */
-.tex{position:absolute;inset:0;pointer-events:none;z-index:1;background-size:cover;background-position:center;animation:texjump .5s steps(1) infinite}
+.tex{position:absolute;inset:0;pointer-events:none;z-index:1;background-size:cover;background-position:center}
 .tex.dark{filter:invert(1);mix-blend-mode:screen;opacity:.09}
 .tex.light{mix-blend-mode:multiply;opacity:.11}
 @keyframes texjump{0%{background-position:50% 50%}33%{background-position:49.4% 50.6%}66%{background-position:50.6% 49.7%}}
@@ -63,10 +64,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .tear{position:absolute;left:0;right:0;top:-1px;height:30px;z-index:4;pointer-events:none}
 
 /* ============ EFÊMEROS REAIS (recortes dos quadros dos vídeos) ============ */
-.crop{position:absolute;z-index:2;pointer-events:none;background-repeat:no-repeat;opacity:.55;animation:boil .3s steps(1) infinite}
+.crop{position:absolute;z-index:2;pointer-events:none;background-repeat:no-repeat;opacity:.55}
 .on-dark .crop{mix-blend-mode:lighten}
 .on-light .crop{mix-blend-mode:darken}
-.paper{position:absolute;z-index:2;pointer-events:none;opacity:.55;animation:boil .35s steps(1) infinite}
+.paper{position:absolute;z-index:2;pointer-events:none;opacity:.55}
 .paper img{width:100%;height:auto}
 .on-light .paper{mix-blend-mode:multiply}
 .on-dark .paper{mix-blend-mode:screen;filter:invert(1)}
@@ -229,13 +230,13 @@ section{position:relative;overflow:hidden;padding:var(--sec) 0}
 /* ============ 01 · HERO ============ */
 .hero{padding:0;height:100vh;min-height:620px;background:var(--preto)}
 .hero .vis{position:absolute;inset:0;z-index:0}
-/* abertura em camadas: esqueleto inteiro respirando; recibos da esquerda flutuam em outro tempo; faixa da direita treme */
+/* abertura em camadas: esqueleto inteiro respirando; recibos e faixa parados, encostados nas bordas */
 .hero .skel-hero{position:absolute;left:50%;top:calc(76px + (100% - 76px - 53px) / 2);width:min(86vw,calc((100vh - 129px) * .88 * 1500 / 1369));aspect-ratio:1500/1369;
   background:url(img/skel_espera.jpg) 50% 50%/contain no-repeat;transform:translate(-50%,-50%);animation:skelBreath 4s steps(10) infinite}
 @keyframes skelBreath{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,calc(-50% - 10px)) scale(1.015)}}
-.hero .eph-l{left:0;top:0;width:clamp(170px,22vw,420px);animation:ephFloat 6.4s steps(8) -1.3s infinite;transform-origin:0 0}
+.hero .eph-l{left:calc(clamp(40px,4vw,80px) * -1);top:0;width:clamp(170px,22vw,420px)}
 @keyframes ephFloat{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(7px,-4px) rotate(-.6deg)}50%{transform:translate(3px,-11px) rotate(.4deg)}75%{transform:translate(-4px,-5px) rotate(-.3deg)}}
-.hero .eph-r{right:0;top:26%;width:clamp(56px,5.6vw,110px);animation:ephShake .32s steps(1) infinite}
+.hero .eph-r{right:-18px;top:26%;width:clamp(56px,5.6vw,110px)}
 @keyframes ephShake{0%{transform:translate(0,0)}20%{transform:translate(-2px,1px)}40%{transform:translate(1px,-2px)}60%{transform:translate(2px,1px)}80%{transform:translate(-1px,2px)}}
 .hero .hud{position:absolute;left:0;right:0;bottom:0;z-index:5;border-top:1px solid var(--line)}
 .hero .hud .container{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:16px 0}
@@ -244,8 +245,6 @@ section{position:relative;overflow:hidden;padding:var(--sec) 0}
 .hero .smile{position:absolute;right:calc((100% - min(var(--maxw),100% - 2*var(--gutter)))/2);bottom:86px;z-index:5;transform:rotate(10deg);width:clamp(150px,15vw,250px)}
 /* parallax da abertura: rolagem (--py*) e mouse (--mx/--my), cada camada numa intensidade */
 .hero .vis{translate:calc(var(--mx,0) * -14px) calc(var(--py,0px) + var(--my,0) * -10px)}
-.hero .eph-l{translate:calc(var(--mx,0) * 26px) calc(var(--pyl,0px) + var(--my,0) * 18px)}
-.hero .eph-r{translate:calc(var(--mx,0) * 8px) calc(var(--pyr,0px) + var(--my,0) * 6px)}
 .hero .smile{translate:calc(var(--mx,0) * 20px) calc(var(--pys,0px) + var(--my,0) * 14px)}
 .intro{background:var(--preto)}
 .intro .display .w{color:var(--branco)}
@@ -398,7 +397,7 @@ footer .legal a{text-transform:uppercase;letter-spacing:.08em}
   .hero .hud .container{grid-template-columns:1fr 1fr}.hero .hud .c{display:none}
   .hero .smile{width:118px;bottom:80px}
   .hero .crop.eph-l,.hero .crop.eph-r{display:block}
-  .hero .eph-l{width:150px}.hero .eph-r{width:44px;top:30%}
+  .hero .eph-l{width:150px}.hero .eph-r{width:44px;top:30%;right:-10px}
   .hero .skel-hero{top:calc(64px + (100% - 64px - 70px) / 2);width:min(92vw,calc((100vh - 134px) * .9 * 1500 / 1369))}
   .facts,.days{grid-template-columns:1fr 1fr}
   .facts div:nth-child(3),.days div:nth-child(3){border-left:0}
@@ -860,8 +859,6 @@ html.lay-smiley [data-smile],html.lay-smiley [data-smile] *{visibility:visible!i
   function parallax(){
     if(reduce || !hero) return; var y = Math.min(scrollY, innerHeight*1.2);
     hero.style.setProperty('--py', (y*.38).toFixed(1)+'px');   /* esqueleto: mais devagar que a página */
-    hero.style.setProperty('--pyl', (y*-.22).toFixed(1)+'px'); /* recibos da esquerda: mais rápidos */
-    hero.style.setProperty('--pyr', (y*.12).toFixed(1)+'px');  /* faixa da direita: quase parada */
     hero.style.setProperty('--pys', (y*-.1).toFixed(1)+'px');
   }
   if(!reduce && hero && matchMedia('(pointer:fine)').matches){
